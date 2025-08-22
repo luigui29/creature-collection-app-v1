@@ -11,26 +11,52 @@ const http = require('http');
 /*Get FS module for helping script find html + other files*/
 const fs = require('fs');
 
+/*Get PATH module to combine request url to directory paths*/
+const path = require('path');
+
+/*Create a map of Multipurpose Internet Mail Extensions (MIME) types*/
+/*to later reference in responses (Content-Type) from the server*/
+/*con: types must be added manually according to webpage needs _(:S ")*/
+const mimeTypes = {
+    '.html' : 'text/html',
+    '.css' : 'text/css',
+    '.js' : 'text/javascript',
+    '.json' : 'application/json',
+    '.png' : 'image/png',
+    '.jpg' : 'image/jpeg',
+    '.jpeg' : 'image/jpeg',
+    '.gif' : 'image/gif'
+};
 
 /*Establish the server*/
 const server = http.createServer((request, response) => {
+    /*[HANDLING ALL URLs]*/
+    /*First URL will return index.html. Every other one returns respective path*/
+    /*___dirname is a global variable in Node that gives the path of server.js*/
+    let requestedPath = request.url === '/' ? '/index.html' : request.url;
+    
+    const filePath = path.join(__dirname, 'public', requestedPath);
+    /*Let's look up the file's extension name*/
+    /*Afterwards assign respective Content-Type according to MIME type*/
+    const extname = path.extname(filePath).toLowerCase();
+    const contentType = mimeTypes[extname]; //TODO: set default
 
-    if (request.url === '/') { // -- Main URL
-        fs.readFile('./public/index.html', 'utf8', (error, fileContent) => {
-            if (error) { // -- Index is not in public folder for some reason
-                console.log('Error with index file: ');
-                response.writeHead(500, { 'Content-Type': 'text/plain' });
-                response.end('Server Error (check console)');
-                return; // -- Halt execution when error found
+    fs.readFile(filePath, (error, content) => {
+            if (error) { 
+                if (error.code === 'ENOENT') { // -- Error code for File Not Found
+                    response.writeHead(404, {'Content-Type' : 'text/plain'});
+                    response.end('404: FILE NOT FOUND DINGUS');
+                }
+                else { // -- Any other server Error
+                    response.writeHead(500, {'Content-Type' : 'text/plain'});
+                    response.end('500: SERVER ERROR DINGUS');
+                }
             }
-
-            response.writeHead(200, { 'Content-Type': 'text/html' });
-            response.end(fileContent);
-        })
-    } else { // -- Requests for other paths
-        response.writeHead(404, { 'Content-Type': 'text/plain' });
-        response.end('404 Not Found! Woopsie Daisies');
-    }
+            else {
+                response.writeHead(200, {'Content-Type' : contentType});
+                response.end(content, 'utf8');
+            }
+    })
 });
 
 /*Build server and set to listen to port*/
