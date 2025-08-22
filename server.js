@@ -17,16 +17,7 @@ const path = require('path');
 /*Create a map of Multipurpose Internet Mail Extensions (MIME) types*/
 /*to later reference in responses (Content-Type) from the server*/
 /*con: types must be added manually according to webpage needs _(:S ")*/
-const mimeTypes = {
-    '.html' : 'text/html',
-    '.css' : 'text/css',
-    '.js' : 'text/javascript',
-    '.json' : 'application/json',
-    '.png' : 'image/png',
-    '.jpg' : 'image/jpeg',
-    '.jpeg' : 'image/jpeg',
-    '.gif' : 'image/gif'
-};
+const mt = require('./mimeTypes.js');
 
 /*Establish the server*/
 const server = http.createServer((request, response) => {
@@ -39,7 +30,7 @@ const server = http.createServer((request, response) => {
     /*Let's look up the file's extension name*/
     /*Afterwards assign respective Content-Type according to MIME type*/
     const extname = path.extname(filePath).toLowerCase();
-    const contentType = mimeTypes[extname]; //TODO: set default
+    const contentType = mt[extname]; //TODO: set default
 
     fs.readFile(filePath, (error, content) => {
             if (error) { 
