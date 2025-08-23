@@ -19,14 +19,16 @@ const path = require('path');
 /*con: types must be added manually according to webpage needs _(:S ")*/
 const mt = require('./mimeTypes.js');
 
+/*___dirname is a global variable in Node that gives the path of server.js*/
+const public = path.join(__dirname, 'public');
+
 /*Establish the server*/
 const server = http.createServer((request, response) => {
     /*[HANDLING ALL URLs]*/
     /*First URL will return index.html. Every other one returns respective path*/
-    /*___dirname is a global variable in Node that gives the path of server.js*/
-    let requestedPath = request.url === '/' ? '/index.html' : request.url;
+    let requestedPath = request.url === '/' ? 'index.html' : request.url;
+    let filePath = path.join(public, requestedPath);
     
-    const filePath = path.join(__dirname, 'public', requestedPath);
     /*Let's look up the file's extension name*/
     /*Afterwards assign respective Content-Type according to MIME type*/
     const extname = path.extname(filePath).toLowerCase();
@@ -45,10 +47,10 @@ const server = http.createServer((request, response) => {
             }
             else {
                 response.writeHead(200, {'Content-Type' : contentType});
-                response.end(content, 'utf8');
+                response.end(content, 'utf8'); 
             }
     })
 });
 
 /*Build server and set to listen to port*/
-server.listen(3000);
+server.listen(5000);
