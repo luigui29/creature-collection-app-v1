@@ -7,7 +7,7 @@ const { DatabaseSync } = require('node:sqlite');
 let db;
 
 try {
-    db = new DatabaseSync('db/creatures_test_2.sq3');
+    db = new DatabaseSync('db/creatures_test_2.sqlite');
     console.log("Connected to creatures database");
 } catch (error) {
     console.error("Failed to connect to database :C ", error);
