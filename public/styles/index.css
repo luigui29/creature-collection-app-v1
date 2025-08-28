@@ -70,3 +70,28 @@ main{
     border-radius: 10px;
     background-color: rgb(191, 255, 218);
 }
+
+/*[CREATURE CARDS]*/
+.showcase-container {
+    display: flex;
+    flex-direction: row;
+
+    gap: 20px;
+}
+
+
+.creature-card {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 350px;
+    min-height: fit-content;
+}
+
+.creature-card-img > img { 
+    image-rendering: pixelated; 
+    width: 256px;
+    height: 256px;
+}
