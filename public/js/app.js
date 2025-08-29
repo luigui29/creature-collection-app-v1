@@ -6,18 +6,18 @@ const fallback_image_path = `../images/picture_gallery/unknown/unknown_1.png`;
 
 function loadImage(src) {
     return new Promise((resolve, reject) => {
-        const img = new Image();
-
-        img.onload = () => resolve(src);
-        img.onerror = () => reject(src);
+        const img = new Image();         // Create an image element with the following attributes:
+                                         // functions in place of the attributes to be executed later
+        img.onload = () => resolve(src); // function() { resolve(src) };
+        img.onerror = () => reject(src); // function() { reject(src) };
         img.src = src;
     })
 }
 
-async function createCreatureCards(image_load_promises, creature_data, showcase_container){
-    await loadImage(fallback_image_path);
+async function buildCreatureCards(image_load_promises, creature_data, showcase_container){
     Promise.allSettled(image_load_promises)
         .then((response) => {
+
             const fragment = document.createDocumentFragment();
 
             creature_data.forEach((creature, index) => {
@@ -48,7 +48,7 @@ async function createCreatureCards(image_load_promises, creature_data, showcase_
         })
 }
 
-async function allCreatures() {
+async function fetchCreatureData() {
 
     main.insertAdjacentHTML("afterbegin", `
         <div class="outer-container">
@@ -65,38 +65,41 @@ async function allCreatures() {
     
     /* FETCH DATA FROM SERVER */
     try {
-        const fetch_response = await fetch('/api/creatures') // -- Should return JSON with all data from creatures.
-            .then((response) => {
+        // -- Should return response data along database query result.
+        const fetch_response = await fetch('/api/creatures') 
+        //console.log(fetch_response);
 
-                if (!response.ok) { 
-                    throw new Error(`Server error: ${response.status}`); 
-                }
+        if (!fetch_response.ok) { 
+            throw new Error(`Server error: ${response.status}`); 
+        }
 
-                const creatures = response.json();
+        // -- Wait for the program to get the JSON data from the response.
+        const creatures = await fetch_response.json();      
+        //console.log(creatures); 
 
-                creatures.then((data) => {
-                    if (data.length === 0) { // -- Check for empty array of creatures.
-                        showcase_container.insertAdjacentHTML("afterbegin", `
-                            <div class="text-container">
-                                <h1>You open the encyclopedia, only to find that it's wiped...</h1>
-                            </div>
-                        `);
-                    
-                        return;
-                    }
+        if (creatures.length === 0) {                     
+            showcase_container.insertAdjacentHTML("afterbegin", `
+                <div class="text-container">
+                    <h1>You open the encyclopedia, only to find that it's wiped...</h1>
+                </div>
+            `);
+        
+            return;
+        }
 
-                    const image_load_promises = data.map(creature => {
-                        const image_name = creature.name 
-                        ? creature.name.toLowerCase() 
-                        : `unknown`;
+        const image_load_promises = creatures.map(creature => {
+            const image_name = creature.name 
+            ? creature.name.toLowerCase() 
+            : `unknown`;
 
-                        const ideal_image_path = loadImage(`../images/picture_gallery/${image_name}/${image_name}_1.png`);
-                        return ideal_image_path;
-                    });
+            const ideal_image_path = loadImage(`../images/picture_gallery/${image_name}/${image_name}_1.png`);
+            return ideal_image_path;
+        });
 
-                    createCreatureCards(image_load_promises, data, showcase_container);                    
-                });
-            });
+        await loadImage(fallback_image_path);
+
+        buildCreatureCards(image_load_promises, creatures, showcase_container);                    
+                
     } catch (error) { 
         loading.style.display = "none";
         showcase_container.insertAdjacentHTML("afterbegin", `
@@ -109,4 +112,4 @@ async function allCreatures() {
     }
 }
 
-allCreatures();
+fetchCreatureData();
