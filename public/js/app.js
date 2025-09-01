@@ -35,10 +35,10 @@ async function buildCreatureCards(image_load_promises, creature_data, showcase_c
                             alt = "Sprite of ${creature.name || 'Unknown'}"
                         >
                     </div>
-                    <div class="text-container">
-                        <h1><span> Creature ${creature.id} </span> <br> ${creature.name || 'Unknown'}</h1>
+                    <div class="creature-card-name">
+                        <h1> Creature ${creature.id} </h1>
+                        <span> ${creature.name || 'Unknown'} </span> 
                     </div>
-                
                 `
                 fragment.appendChild(creature_card);
             });
