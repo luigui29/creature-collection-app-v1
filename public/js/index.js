@@ -1,52 +1,9 @@
 /*Step-by-Step for the app.js*/
 /*TODO: Pass this to the README.md*/
 let main = document.querySelector('main');
-const fallback_image_path = `../images/picture_gallery/unknown/unknown_1.png`;
 
-
-function loadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();         // Create an image element with the following attributes:
-                                         // functions in place of the attributes to be executed later
-        img.onload = () => resolve(src); // function() { resolve(src) };
-        img.onerror = () => reject(src); // function() { reject(src) };
-        img.src = src;
-    })
-}
-
-async function buildCreatureCards(image_load_promises, creature_data, showcase_container){
-    Promise.allSettled(image_load_promises)
-        .then((response) => {
-
-            const fragment = document.createDocumentFragment();
-
-            creature_data.forEach((creature, index) => {
-                let image_source = (response[index].status === `fulfilled`)
-                ? response[index].value
-                : fallback_image_path;
-
-                /* Defining the Elements to be built inside fragment */
-                let creature_card = document.createElement(`div`);
-                creature_card.className = `creature-card`;
-                creature_card.innerHTML = `
-                    <div class="creature-card-img">
-                        <img 
-                            src = "${image_source}"
-                            alt = "Sprite of ${creature.name || 'Unknown'}"
-                        >
-                    </div>
-                    <div class="creature-card-name">
-                        <h1> Creature ${creature.id} </h1>
-                        <span> ${creature.name || 'Unknown'} </span> 
-                    </div>
-                `
-                fragment.appendChild(creature_card);
-            });
-                
-            loading.style.display = "none";
-            showcase_container.appendChild(fragment);
-        })
-}
+import { loadImage } from './modules/imageLoader.js';
+import { buildCreatureCards } from './modules/cardBuilder.js';
 
 async function fetchCreatureData() {
 
@@ -75,7 +32,7 @@ async function fetchCreatureData() {
 
         // -- Wait for the program to get the JSON data from the response.
         const creatures = await fetch_response.json();      
-        //console.log(creatures); 
+        console.log(creatures); 
 
         if (creatures.length === 0) {                     
             showcase_container.insertAdjacentHTML("afterbegin", `
@@ -87,6 +44,7 @@ async function fetchCreatureData() {
             return;
         }
 
+        // -- Create a map where each creature is given their ideal image path as a value
         const image_load_promises = creatures.map(creature => {
             const image_name = creature.name 
             ? creature.name.toLowerCase() 
@@ -95,11 +53,11 @@ async function fetchCreatureData() {
             const ideal_image_path = loadImage(`../images/picture_gallery/${image_name}/${image_name}_1.png`);
             return ideal_image_path;
         });
-
-        await loadImage(fallback_image_path);
+        //console.log(image_load_promises);
 
         buildCreatureCards(image_load_promises, creatures, showcase_container);                    
-                
+        // check modules for info
+
     } catch (error) { 
         loading.style.display = "none";
         showcase_container.insertAdjacentHTML("afterbegin", `

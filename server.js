@@ -41,6 +41,7 @@ const public = path.join(__dirname, 'public');
 const server = http.createServer((request, response) => { // -- Initiate Server
     
     let requestedPath = request.url === '/' ? 'index.html' : request.url;
+    //console.log(request.url);
     let filePath = path.join(public, requestedPath);
     
     const extname = path.extname(filePath).toLowerCase();

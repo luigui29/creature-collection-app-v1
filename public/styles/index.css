@@ -48,6 +48,8 @@ main{
     background-color: rgba(112, 255, 172, 0.637);
     border: 5px solid white;
     border-radius: 10px;
+    
+    pointer-events: none;
 }
 
 .outer-container::after {
@@ -86,6 +88,15 @@ main{
     align-items: center;
 
     width: 300px;
+
+    position: relative;
+    z-index: 5;
+
+    pointer-events: all;
+}
+
+.creature-card:hover {
+    cursor: pointer;
 }
 
 .creature-card-img {
