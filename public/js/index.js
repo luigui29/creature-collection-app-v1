@@ -1,4 +1,4 @@
-/*Step-by-Step for the app.js*/
+/*Step-by-Step for the index.js*/
 /*TODO: Pass this to the README.md*/
 let main = document.querySelector('main');
 
