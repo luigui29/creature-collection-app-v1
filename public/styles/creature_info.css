@@ -80,3 +80,7 @@ main{
     gap: 40px;
 }
 
+.creature-entry.hidden { /* Added to all creature info that isn't current creature */
+    display: none;
+}
+

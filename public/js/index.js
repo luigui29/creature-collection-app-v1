@@ -32,7 +32,7 @@ async function fetchCreatureData() {
 
         // -- Wait for the program to get the JSON data from the response.
         const creatures = await fetch_response.json();      
-        console.log(creatures); 
+        //console.log(creatures); 
 
         if (creatures.length === 0) {                     
             showcase_container.insertAdjacentHTML("afterbegin", `
