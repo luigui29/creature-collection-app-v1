@@ -50,7 +50,7 @@ const server = http.createServer((request, response) => { // -- Initiate Server
     /* [--------------------API ENDPOINTS-------------------------] */
     if (request.url === '/api/creatures') { // -- Send all creature data
         try {
-            const creatures = db.prepare('SELECT * FROM creatures').all();
+            const creatures = db.prepare('SELECT * FROM creatures ORDER BY id ASC').all();
             response.writeHead(200, { 'Content-Type' : 'application/json' });
             response.end(JSON.stringify(creatures));
         } catch (db_error) {

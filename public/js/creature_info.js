@@ -2,6 +2,7 @@ let main = document.querySelector('main');
 
 function showCreatureById(id) {
     const all_entries = document.querySelectorAll(`.creature-entry`);
+    console.log(all_entries);
 
     all_entries.forEach(entry => {
         if      (entry.id === `creature-${id}`)     { entry.classList.remove(`hidden`); }
@@ -13,7 +14,9 @@ function navigateToCreature(button_direction, creature_collection) {
     const current_hash = window.location.hash; // -- Get url hash of creature
     const current_id = parseInt(current_hash.replace(`#creature-`, ` `)); // -- Isolate ID from hash and pass it to a constant as an int
     const current_index = creature_collection.findIndex(creature => creature.id === current_id);
-
+    console.log(current_index);
+    console.log(creature_collection);
+    
     if (current_index === -1) return; // -- Index not found in creature collection
 
     let next_index;
@@ -43,6 +46,7 @@ function navigateToCreature(button_direction, creature_collection) {
     /* Transform window URL to match the desired creature to be viewed */
     const next_creature_id = creature_collection[next_index].id;
     window.location.hash = `#creature-${next_creature_id}`;
+    showCreatureById(next_creature_id);
 }
 
 async function fetchCreatureInfo() {
@@ -83,6 +87,7 @@ async function fetchCreatureInfo() {
         }
 
         /* Making all Divs for each Creature */
+        loading.style.display = 'none';
 
         creatures.forEach(creature => {
             const entry_div = document.createElement('div');
@@ -96,6 +101,7 @@ async function fetchCreatureInfo() {
             showcase_container.appendChild(entry_div);
         });
 
+        console.log(creatures);
         /* Current ID */
 
         const initial_id = parseInt(window.location.hash.replace(`#creature-`, ` `));
