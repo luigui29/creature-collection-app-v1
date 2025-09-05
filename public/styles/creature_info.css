@@ -72,7 +72,7 @@ main{
     background-color: rgb(191, 255, 218);
 }
 
-/*[CREATURE CARDS]*/
+/* =====[ CREATURE INFO ]===== */
 .showcase-container {
     display: flex;
     flex-direction: row;
@@ -84,3 +84,97 @@ main{
     display: none;
 }
 
+.creature-stats,
+.hexagon {
+    width: 300px;
+    height: 300px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.hexagon {
+    background-color: grey;
+    
+    clip-path: polygon(
+    50% 0, 
+    90% 25%, 
+    90% 75%, 
+    50% 100%, 
+    10% 75%, 
+    10% 25%
+    );
+}
+.hexagon.inner { 
+    background-color: rgb(255, 0, 0); 
+    width: 200px; 
+    height: 200px; 
+
+    z-index: 2;
+}
+.hexagon.innermost { 
+    background-color: green; 
+    width: 100px; 
+    height: 100px; 
+
+    z-index: 3;
+}
+
+.star {
+    width: 300px;
+    height: 300px;
+
+    clip-path: polygon(
+    50% 0, 
+    40% 35%, 
+    10% 25%, 
+    30% 50%, 
+    10% 75%, 
+    40% 65%, 
+    50% 100%, 
+    60% 65%, 
+    90% 75%, 
+    70% 50%, 
+    90% 25%, 
+    60% 35%
+    );
+
+    background-color: yellow;
+
+    position: absolute;
+    top: 0;
+}
+/*
+
+STAR SHAPE 
+
+clip-path: polygon(
+    50% 0, 
+    40% 35%, 
+    10% 25%, 
+    30% 50%, 
+    10% 75%, 
+    40% 65%, 
+    50% 100%, 
+    60% 65%, 
+    90% 75%, 
+    70% 50%, 
+    90% 25%, 
+    60% 35%
+);
+
+HEXAGON SHAPE
+
+clip-path: polygon(
+    50% 0, 
+    90% 25%, 
+    90% 75%, 
+    50% 100%, 
+    10% 75%, 
+    10% 25%);
+);
+
+*/

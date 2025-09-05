@@ -51,6 +51,18 @@ async function fetchCreatureInfo() {
             
             entry_div.innerHTML = `
                 <h1>${creature.name}</h1>
+                <div class="creature-stats">
+                    <div class="stats-shape">
+                        <div class="hexagon">
+                            <div class="hexagon inner">
+                                <div class="hexagon innermost">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="star">
+                        </div>
+                    </div>
+                </div>
             `
             showcase_container.appendChild(entry_div);
         });

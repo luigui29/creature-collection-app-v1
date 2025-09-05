@@ -33,10 +33,7 @@ export async function buildCreatureCards(image_load_promises, creature_data, sho
 
                 /* Click on card to transport to respective creature info */
                 creature_card.addEventListener(`click`, () => {
-                    console.log("Clicked!");
-                    
                     window.location.href = `../pages/creature_info.html#creature-${creature.id}`;
-                    
                 });
 
                 fragment.appendChild(creature_card);
