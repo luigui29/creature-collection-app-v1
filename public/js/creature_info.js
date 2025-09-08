@@ -38,31 +38,51 @@ async function fetchCreatureInfo() {
             return;
         }
 
-        // -- Fetch creature type data
+        // -- Fetch types data
+        let fetch_types = await fetch('/api/types');
+        if (!fetch_types.ok) {
+            throw new Error(`Server error: ${fetch_types.status}`);
+        }
+
+        const types = await fetch_types.json();
+        console.log(types);
+        // -- Fetch types of creatures
         let fetch_creature_types = await fetch('/api/creatures/types');
-        if (!fetch_creature_types.ok) {
+        if (!fetch_types.ok) {
             throw new Error(`Server error: ${fetch_creature_types.status}`);
         }
 
         const creature_types = await fetch_creature_types.json();
-        console.log(creature_types);
         /* ============================================= */
-        
+
         /* =====[ CREATING CREATURE DATA HYPERTEXT WOOOW ]===== */
         loading.style.display = 'none';
 
         creatures.forEach(creature => {
-            const entry_div = document.createElement('div');
-            entry_div.className = `creature-entry hidden`;
-            entry_div.id = `creature-${creature.id}`;
+            const entry_div = document.createElement('div'); // Each creature is inside a parent "creature-entry"
+            entry_div.className = `creature-entry hidden`;   // They are all display: none by default. Only active creature should be viewable
+            entry_div.id = `creature-${creature.id}`;        // Id is for telling which entry-div should be active
 
+            let this_types_id = [];                          // Create an array that gets all types of current creature           
+            creature_types.forEach((type) => {               // from creature_types table which is a many-to-many
+                if (type.creature_id === creature.id) {      // relationship between types and creatures
+                    this_types_id.push(type.type_id)
+                }
+            });
+
+            let this_types = [];                             // From previous array push into usable array that contains all
+            this_types_id.forEach((target_type_id) => {      // info from the creature's types, including name, ico, etc.
+                let found_type = types.find(type => type.id === target_type_id);
+
+                if (found_type) this_types.push(found_type);
+            });
 
             entry_div.innerHTML = `
                 <h1>${creature.name}</h1>
                 <div class="creature-types-and-others">
                     <div class="creature-types-container">
-                        <div class="creature-type"></div>
-                        <div class="creature-type"></div>
+                        <div class="creature-type">${this_types[0].name}</div>
+                        <div class="creature-type">${this_types[0].name}</div>
                         <div class="creature-type"></div>
                     </div>
                 </div>

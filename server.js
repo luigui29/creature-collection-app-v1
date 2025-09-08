@@ -59,7 +59,18 @@ const server = http.createServer((request, response) => { // -- Initiate Server
             response.end('Internal Server Error: Could not query the database.');
         } 
     } else
-    if (request.url === '/api/creatures/types') { // -- Send creature type
+    if (request.url === '/api/types') { // -- Send creature type
+        try {
+            const types = db.prepare('SELECT * FROM types').all();
+            response.writeHead(200, { 'Content-Type' : 'application/json' });
+            response.end(JSON.stringify(types));
+        } catch (error) {
+            console.error('Database query failed :C ', error);
+            response.writeHead(500, { 'Content-Type' : 'text/plain' });
+            response.end('Internal Server Error: Could not query the database.');
+        } 
+    } else
+    if (request.url === '/api/creatures/types') {
         try {
             const creature_types = db.prepare('SELECT * FROM creature_types').all();
             response.writeHead(200, { 'Content-Type' : 'application/json' });
@@ -68,7 +79,7 @@ const server = http.createServer((request, response) => { // -- Initiate Server
             console.error('Database query failed :C ', error);
             response.writeHead(500, { 'Content-Type' : 'text/plain' });
             response.end('Internal Server Error: Could not query the database.');
-        } 
+        }
     } else {
         fs.readFile(filePath, (error, content) => { 
             if (error) { 

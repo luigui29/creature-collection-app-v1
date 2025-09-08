@@ -46,7 +46,7 @@ async function fetchCreatureData() {
 
         // -- Create a map where each creature is given their ideal image path as a value
         const image_load_promises = creatures.map(creature => {
-            const image_name = creature.name 
+            const image_name = creature.name
             ? creature.name.toLowerCase() 
             : `unknown`;
 
