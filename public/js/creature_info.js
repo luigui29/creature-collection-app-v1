@@ -14,52 +14,81 @@ async function fetchCreatureInfo() {
         </div>
     `);
 
-    let showcase_container = document.querySelector('.showcase-container');
-    let loading = document.querySelector('#loading');
-
-    let next_btn = document.querySelector('#next-button');
-    let prev_btn = document.querySelector('#prev-button');
+    let showcase_container = document.querySelector('.showcase-container'); // A generic container that tells the user data is being loaded is created.
+    let loading = document.querySelector('#loading');                       // Then the elements of this container are stored into these variables to
+                                                                            // later add creature data to them or hide them once this data is laoded.
+    let next_btn = document.querySelector('#next-button');                  // The buttons for navigation are also queried which are static elements
+    let prev_btn = document.querySelector('#prev-button');                  // already in the .html file.
 
     try {
-        const fetch_response = await fetch('/api/creatures') 
-        //console.log(fetch_response);
-        
-        if (!fetch_response.ok) { 
-            throw new Error(`Server error: ${response.status}`); 
+        /* =====[ FETCHING CREATURES FROM SERVER ]===== */
+        // -- Fetch creature main data
+        let fetch_creatures = await fetch('/api/creatures');
+        if (!fetch_creatures.ok) { 
+            throw new Error(`Server error: ${fetch_creatures.status}`);
         }
 
-        const creatures = await fetch_response.json();
-        //console.log(creatures);
+        const creatures = await fetch_creatures.json();
         if (creatures.length === 0) {                     
             showcase_container.insertAdjacentHTML("afterbegin", `
                 <div class="text-container">
                     <h1>You open the encyclopedia, only to find that it's wiped...</h1>
                 </div>
             `);
-        
             return;
         }
 
-        /* Making all Divs for each Creature */
+        // -- Fetch creature type data
+        let fetch_creature_types = await fetch('/api/creatures/types');
+        if (!fetch_creature_types.ok) {
+            throw new Error(`Server error: ${fetch_creature_types.status}`);
+        }
+
+        const creature_types = await fetch_creature_types.json();
+        console.log(creature_types);
+        /* ============================================= */
+        
+        /* =====[ CREATING CREATURE DATA HYPERTEXT WOOOW ]===== */
         loading.style.display = 'none';
 
         creatures.forEach(creature => {
             const entry_div = document.createElement('div');
-            
             entry_div.className = `creature-entry hidden`;
             entry_div.id = `creature-${creature.id}`;
-            
+
+
             entry_div.innerHTML = `
                 <h1>${creature.name}</h1>
+                <div class="creature-types-and-others">
+                    <div class="creature-types-container">
+                        <div class="creature-type"></div>
+                        <div class="creature-type"></div>
+                        <div class="creature-type"></div>
+                    </div>
+                </div>
                 <div class="creature-stats">
                     <div class="stats-shape">
                         <div class="hexagon">
                             <div class="hexagon inner">
-                                <div class="hexagon innermost">
-                                </div>
+                                <div class="hexagon innermost"></div>
                             </div>
+                            <div class="star"></div>
                         </div>
-                        <div class="star">
+                    </div>
+                    <h5>HEALTH</h5>      <h5>STRENGTH</h5> 
+                    <h5>RESISTANCE</h5>  <h5>SPEED</h5> 
+                    <h5>FLEXIBILITY</h5> <h5>INTELLIGENCE</h5>
+                </div>
+                <div class="creature-baby-and-adult">
+                    <div class="creature-baby-container">
+                        <h5>evolves from...</h5>
+                        <div class="creature-circle">
+                            <div class="creature-image"></div>
+                        </div>
+                    </div>
+                    <div class="creature-adult-container">
+                        <div class="creature-circle">
+                            <div class="creature-image"></div>
                         </div>
                     </div>
                 </div>

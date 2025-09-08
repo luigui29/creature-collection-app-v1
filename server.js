@@ -30,7 +30,7 @@ const mt = require('./mimeTypes.js');
 
 /*
     lines 39 & 43 - 47 
-    + ___dirname is a global variable in Node that gives the directory of server.js
+    + __dirname is a global variable in Node that gives the directory of server.js
       We'll "join" the fetched urls from client-side into our directory's structure
     + First URL will return index.html. Every other one returns respective path.
       Afterwards, join with directory's structure, then assign Content-Type based on
@@ -45,7 +45,7 @@ const server = http.createServer((request, response) => { // -- Initiate Server
     let filePath = path.join(public, requestedPath);
     
     const extname = path.extname(filePath).toLowerCase();
-    const contentType = mt[extname]; //TODO: set default
+    const content_type = mt[extname]; //TODO: set default
 
     /* [--------------------API ENDPOINTS-------------------------] */
     if (request.url === '/api/creatures') { // -- Send all creature data
@@ -53,17 +53,24 @@ const server = http.createServer((request, response) => { // -- Initiate Server
             const creatures = db.prepare('SELECT * FROM creatures ORDER BY id ASC').all();
             response.writeHead(200, { 'Content-Type' : 'application/json' });
             response.end(JSON.stringify(creatures));
-        } catch (db_error) {
-            console.error('Database query failed :C ', db_error);
-            response.writeHead(500, { 'Content-Type' : 'application/json' });
-            response.end(JSON.stringify({ error: 'Failed to retrieve data' }));
-        }
-
-        return;
-    }
-    /* [----------------------------------------------------------] */
-
-    fs.readFile(filePath, (error, content) => {
+        } catch (error) {
+            console.error('Database query failed :C ', error);
+            response.writeHead(500, { 'Content-Type' : 'text/plain' });
+            response.end('Internal Server Error: Could not query the database.');
+        } 
+    } else
+    if (request.url === '/api/creatures/types') { // -- Send creature type
+        try {
+            const creature_types = db.prepare('SELECT * FROM creature_types').all();
+            response.writeHead(200, { 'Content-Type' : 'application/json' });
+            response.end(JSON.stringify(creature_types));
+        } catch (error) {
+            console.error('Database query failed :C ', error);
+            response.writeHead(500, { 'Content-Type' : 'text/plain' });
+            response.end('Internal Server Error: Could not query the database.');
+        } 
+    } else {
+        fs.readFile(filePath, (error, content) => { 
             if (error) { 
                 if (error.code === 'ENOENT') { // -- Error code for File Not Found
                     response.writeHead(404, {'Content-Type' : 'text/plain'});
@@ -75,12 +82,12 @@ const server = http.createServer((request, response) => { // -- Initiate Server
                 }
             }
             else {
-                response.writeHead(200, {'Content-Type' : contentType});
+                response.writeHead(200, {'Content-Type' : content_type});
                 response.end(content, 'utf8'); 
             }
-    })
+        })   
+    } 
 });
-/* [--------------------------------------------------------------------] */
 
 /*Build server and set to listen to port*/
 server.listen(5000);

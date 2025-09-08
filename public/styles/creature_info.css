@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Jersey-20';
+    src: url('../fonts/Jersey20-Regular.ttf') format('truetype');
+}
+
 html {
     height: 100%;
 }
@@ -79,12 +84,17 @@ main{
 
     gap: 40px;
 }
+.creature-entry.hidden { display: none; }
 
-.creature-entry.hidden { /* Added to all creature info that isn't current creature */
-    display: none;
+.creature-types-and-others {background-color: green;}
+
+.creature-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
 }
-
-.creature-stats,
 .hexagon {
     width: 300px;
     height: 300px;
@@ -94,9 +104,7 @@ main{
     justify-content: center;
 
     position: relative;
-}
 
-.hexagon {
     background-color: grey;
     
     clip-path: polygon(
@@ -122,7 +130,6 @@ main{
 
     z-index: 3;
 }
-
 .star {
     width: 300px;
     height: 300px;
@@ -146,35 +153,39 @@ main{
 
     position: absolute;
     top: 0;
+
+    z-index: 4;
 }
-/*
-
-STAR SHAPE 
-
-clip-path: polygon(
-    50% 0, 
-    40% 35%, 
-    10% 25%, 
-    30% 50%, 
-    10% 75%, 
-    40% 65%, 
-    50% 100%, 
-    60% 65%, 
-    90% 75%, 
-    70% 50%, 
-    90% 25%, 
-    60% 35%
-);
-
-HEXAGON SHAPE
-
-clip-path: polygon(
-    50% 0, 
-    90% 25%, 
-    90% 75%, 
-    50% 100%, 
-    10% 75%, 
-    10% 25%);
-);
-
-*/
+.creature-stats h5 {
+    font-family: 'Jersey-20';
+    color: black;
+}
+.creature-stats h5:nth-of-type(1) { /* HEALTH */
+    position: absolute;
+    top: -20%;
+}
+.creature-stats h5:nth-of-type(2) { /* STRENGTH */
+    position: absolute;
+    left: -20%;
+    top: 10%;
+}
+.creature-stats h5:nth-of-type(3) { /* RESISTANCE */
+    position: absolute;
+    left: -25%;
+    bottom: 10%;
+}
+.creature-stats h5:nth-of-type(4) { /* SPEED */
+    position: absolute;
+    bottom: -20%;
+}
+.creature-stats h5:nth-of-type(5) { /* FLEXIBILITY */
+    position: absolute;
+    right: -15%;
+    bottom: 10%;
+}
+.creature-stats h5:nth-of-type(6) { /* INTELLIGENCE */
+    position: absolute;
+    right: -20%;
+    top: 10%;
+}
+.creature-baby-and-adult {background-color: red;}
