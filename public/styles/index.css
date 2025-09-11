@@ -1,0 +1,159 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    
+    margin: 0;
+    padding: 0;
+
+    position: relative;
+}
+
+main{
+    min-height: 100%;
+
+    display: flex;
+}
+
+#background-image {
+    width: 100%;
+    min-height: 100%;
+    
+    background-image: url(../images/background_1.png);
+    background-size: 2500px;
+    background-position: 500px;
+    filter: brightness(50%);
+
+    position: absolute;
+    top: 0;
+    z-index: -9;
+}
+
+/*STYLES OF CONTAINERS*/
+.outer-container {
+    margin: 50px;
+
+    width: 50%;
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    z-index: 2;
+
+    background-color: rgba(112, 255, 172, 0.637);
+    border: 5px solid white;
+    border-radius: 10px;
+    
+    pointer-events: none;
+}
+
+.outer-container::after {
+    content: "";
+    
+    width: 100%;
+    min-height: 100%;
+
+    position: absolute;
+    z-index: 5;
+
+    border-radius: 10px;
+    box-shadow: 0px 0px 100px rgba(255, 255, 255, 0.589) inset;
+}
+
+.text-container {
+    padding: 10px;
+
+    border-radius: 10px;
+    background-color: rgb(191, 255, 218);
+}
+
+/*[CREATURE CARDS]*/
+.showcase-container {
+    display: flex;
+    flex-direction: row;
+
+    gap: 40px;
+}
+
+
+.creature-card {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    width: 300px;
+
+    position: relative;
+    z-index: 5;
+
+    pointer-events: all;
+}
+
+.creature-card:hover {
+    cursor: pointer;
+}
+
+.creature-card-img {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-grow: 1;
+    min-width: 300px;
+    
+    border-radius: 10px 10px 0px 0px;
+    background-color: rgba(86, 52, 21, 0.5);
+
+    box-shadow:
+        -10px 0px 0px 0px rgb(76, 40, 6),
+        10px 0px 0px 0px rgb(76, 40, 6),
+        0px -2px 0px 10px rgb(76, 40, 6);
+}
+
+.creature-card-img > img { 
+    image-rendering: pixelated; 
+    width: 256px;
+    height: 256px;
+}
+
+.creature-card-name {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 0px 0px 10px 10px;
+    background-color: rgb(76, 40, 6);
+    padding: 10px;
+
+    flex-grow: 1;
+    min-width: 300px;
+}
+
+.creature-card-name > h1 {
+    text-align: left;
+
+    margin: 0;
+
+    color: rgb(88, 88, 88);
+    background-color: rgb(174, 135, 98);
+}
+
+.creature-card-name > span {
+    text-align: center;
+    font-size: 48px;
+
+    margin: 0 auto;
+
+    width: 100%;
+
+    border-radius: 0px 0px 10px 10px;
+    color: rgb(194, 194, 194);
+    background-color: rgb(117, 85, 56);
+}
