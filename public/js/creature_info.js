@@ -22,30 +22,15 @@ async function fetchCreatureInfo() {
 
     try {
         /* =====[ FETCHING CREATURES FROM SERVER ]===== */
+
         // -- Fetch creature data
-        let fetch_creatures = await fetch('/api/creatures');
-        if (!fetch_creatures.ok) { 
+        let fetch_creatures = await fetch('/api/creatures/info');
+        if (!fetch_creatures.ok) {
             throw new Error(`Server error: ${fetch_creatures.status}`);
         }
 
         const creatures = await fetch_creatures.json();
-        if (creatures.length === 0) {                     
-            showcase_container.insertAdjacentHTML("afterbegin", `
-                <div class="text-container">
-                    <h1>You open the encyclopedia, only to find that it's wiped...</h1>
-                </div>
-            `);
-            return;
-        }
-
-        // -- Fetch creature data
-        let fetch_creatures2 = await fetch('/api/creatures/info');
-        if (!fetch_creatures2.ok) {
-            throw new Error(`Server error: ${fetch_creatures2.status}`);
-        }
-
-        const creatures2 = await fetch_creatures2.json();
-        console.log(creatures2);
+        console.log(creatures);
 
         /* ============================================= */
 
@@ -57,14 +42,22 @@ async function fetchCreatureInfo() {
             entry_div.className = `creature-entry hidden`;   // They are all display: none by default. Only active creature should be viewable
             entry_div.id = `creature-${creature.id}`;        // Id is for telling which entry-div should be active
 
-
             entry_div.innerHTML = `
                 <h1>${creature.name}</h1>
                 <div class="creature-types-and-others">
                     <div class="creature-types-container">
-                        <div class="creature-type">$</div>
-                        <div class="creature-type"></div>
-                        <div class="creature-type"></div>
+                        <div class="creature-type-and-headline">
+                            <div class="creature-headline">PHYSICAL</div>
+                            <div class="creature-type">${(creature.types[0] === undefined) ? 'Unknown' : creature.types[0].name}</div>
+                        </div>
+                        <div class="creature-type-and-headline">
+                            <div class="creature-headline">ELEMENTAL</div>
+                            <div class="creature-type">${(creature.types[1] === undefined) ? 'Unknown' : creature.types[1].name}</div>
+                        </div>
+                        <div class="creature-type-and-headline">
+                            <div class="creature-headline">TECHNICAL</div>
+                            <div class="creature-type">${(creature.types[2] === undefined) ? 'Unknown' : creature.types[2].name}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="creature-stats">
