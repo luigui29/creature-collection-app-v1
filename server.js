@@ -59,27 +59,62 @@ const server = http.createServer((request, response) => { // -- Initiate Server
             response.end('Internal Server Error: Could not query the database.');
         } 
     } else
-    if (request.url === '/api/types') { // -- Send creature type
+    if (request.url === '/api/creatures/info') { // -- Send creature type
         try {
-            const types = db.prepare('SELECT * FROM types').all();
+            let query = `
+                SELECT
+                    creatures.id AS creature_id,
+                    creatures.name AS creature_name,
+                    creatures.desc AS creature_desc,
+                    creatures.weight,
+                    types.id AS type_id,
+                    types.name AS type_name,
+                    types.category AS type_category,
+                    types.ico AS type_ico
+                FROM
+                    creatures
+                JOIN
+                    creature_types ON creatures.id = creature_types.creature_id
+                JOIN
+                    types ON creature_types.type_id = types.id
+                ORDER BY
+                    creatures.id
+            `;
+            const queried_results = db.prepare(query).all();
+            
+            // -- Transforming queried_results into valid output -- //
+            const creatures_info_map = {}; 
+
+            queried_results.forEach(row => {                      // The query returns an entry for the same creature
+                if (!creatures_info_map[row.creature_id]) {       // up to three times depending on its different types
+                    creatures_info_map[row.creature_id] = {       // so we have to make sure we get the basic info for
+                        id: row.creature_id,                      // each creature once to avoid "repeated rows" in our
+                        name: row.creature_name,                  // desired JSON.
+                        description: row.creature_desc,
+                        weight: row.weight,
+                        types: []
+                    };
+                }
+
+                creatures_info_map[row.creature_id].types.push({  // Each row of the query returns new type info so
+                    id: row.type_id,                              // we'll always push this info to the array of types
+                    name: row.type_name,                          // above. 
+                    category: row.type_category,        
+                    icon: row.type_ico
+                });
+            });
+
+            const creatures_info = Object.values(creatures_info_map);
+            // -- Finished reading array with desired structure -- //
+
             response.writeHead(200, { 'Content-Type' : 'application/json' });
-            response.end(JSON.stringify(types));
+            response.end(JSON.stringify(creatures_info));
+
         } catch (error) {
             console.error('Database query failed :C ', error);
             response.writeHead(500, { 'Content-Type' : 'text/plain' });
             response.end('Internal Server Error: Could not query the database.');
         } 
-    } else
-    if (request.url === '/api/creatures/types') {
-        try {
-            const creature_types = db.prepare('SELECT * FROM creature_types').all();
-            response.writeHead(200, { 'Content-Type' : 'application/json' });
-            response.end(JSON.stringify(creature_types));
-        } catch (error) {
-            console.error('Database query failed :C ', error);
-            response.writeHead(500, { 'Content-Type' : 'text/plain' });
-            response.end('Internal Server Error: Could not query the database.');
-        }
     } else {
         fs.readFile(filePath, (error, content) => { 
             if (error) { 
