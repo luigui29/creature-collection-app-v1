@@ -43,7 +43,15 @@ async function fetchCreatureInfo() {
             entry_div.id = `creature-${creature.id}`;        // Id is for telling which entry-div should be active
 
             entry_div.innerHTML = `
-                <h1>${creature.name}</h1>
+            <div class="creature-info-grid">
+                <div class="creature-main-img">
+                    <div class="creature-circle">
+                    </div>
+                </div>
+                <div class="creature-name-and-desc">
+                    <div class="creature-name">${creature.name}</div>
+                    <div class="creature-desc">${creature.description}</div>
+                </div>
                 <div class="creature-types-and-others">
                     <div class="creature-types-container">
                         <div class="creature-type-and-headline">
@@ -86,6 +94,7 @@ async function fetchCreatureInfo() {
                         </div>
                     </div>
                 </div>
+            </div>
             `
             showcase_container.appendChild(entry_div);
         });

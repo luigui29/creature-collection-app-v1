@@ -86,12 +86,89 @@ main{
 }
 .creature-entry.hidden { display: none; }
 
+.creature-info-grid {
+    display: grid;
+
+    grid-template-areas:
+        "img  img  .     .     .    "
+        "img  img  types types types"
+        "img  img  stats stats stats"
+        "desc desc stats stats stats"
+        "desc desc evo   evo   evo  ";
+}
+
+.creature-circle {
+    width: 100px;
+    height: 100px;
+
+    border-radius: 100%;
+    background-color: rgb(147, 147, 147);
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.creature-circle::before {
+    content: "";
+
+    width: 110%;
+    min-height: 110%;
+
+    border-radius: 100%;
+    background-color: rgb(75, 75, 75);
+
+    position: absolute;
+    z-index: -1;
+}
+
+.creature-main-img {
+    grid-area: img;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 50px 50px;
+}
+.creature-main-img .creature-circle {
+    width: 300px;
+    height: 300px;
+}
+
+.creature-name-and-desc {
+    grid-area: desc;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: 20px 50px;
+}
+.creature-name {
+    font-family: 'Jersey-20';
+    font-size: 64px;
+    text-align: center;
+    color: black;
+}
+.creature-desc {
+    font-family: 'Jersey-20';
+    font-size: 32px;
+    text-align: left;
+    color: black;
+
+    background-color: rgb(85, 85, 85);
+    padding: 15px;
+}
+
 .creature-types-and-others {
+    grid-area: types;
+
     font-family: 'Jersey-20';
     color: black;
 
     background-color: green;
-    margin: auto auto 100px auto;
+    margin: 25px 50px;
 }
 .creature-types-container {
     display: flex;
@@ -116,10 +193,14 @@ main{
 }
 
 .creature-stats {
+    grid-area: stats;
+
     display: flex;
     justify-content: center;
 
     position: relative;
+
+    margin: 50px 50px auto 50px;
 }
 .hexagon {
     width: 300px;
@@ -192,12 +273,12 @@ main{
 }
 .creature-stats h5:nth-of-type(2) { /* STRENGTH */
     position: absolute;
-    left: -20%;
+    left: 5%;
     top: 10%;
 }
 .creature-stats h5:nth-of-type(3) { /* RESISTANCE */
     position: absolute;
-    left: -25%;
+    left: 3%;
     bottom: 10%;
 }
 .creature-stats h5:nth-of-type(4) { /* SPEED */
@@ -206,12 +287,53 @@ main{
 }
 .creature-stats h5:nth-of-type(5) { /* FLEXIBILITY */
     position: absolute;
-    right: -15%;
+    right: 4%;
     bottom: 10%;
 }
 .creature-stats h5:nth-of-type(6) { /* INTELLIGENCE */
     position: absolute;
-    right: -20%;
+    right: 2%;
     top: 10%;
 }
-.creature-baby-and-adult {background-color: red;}
+
+.creature-baby-and-adult {
+    grid-area: evo;
+
+    background-color: red;
+    margin: 100px 50px;
+
+    width: 400px;
+    height: 230px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    position: relative;
+    z-index: -2;
+}
+.creature-baby-container {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    position: absolute;
+    top: 20%;
+    left: 10%;
+}
+.creature-baby-container .creature-circle {
+    width: 100px;
+    height: 100px;
+}
+.creature-adult-container {
+    align-items: center;
+
+    position: absolute;
+    top: 10%;
+    right: 10%;
+}
+.creature-adult-container .creature-circle {
+    width: 150px;
+    height: 150px;
+}
